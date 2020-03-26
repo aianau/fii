@@ -1,10 +1,9 @@
-package com.company;
+package sgbd.lab5;
 
 import java.sql.*;
 
-public class Tema5 {
-    public Tema5() {
-
+public class Exception {
+    public static void run(){
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(
@@ -17,7 +16,7 @@ public class Tema5 {
             callableStatement.setString(3,"Andrei");
             callableStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
     }
 }
