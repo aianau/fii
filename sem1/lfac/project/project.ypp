@@ -1,0 +1,515 @@
+%{
+// PRE COMPILATION OPTIONS
+#define __DEBUG__
+
+// DEFINES
+
+#ifdef __DEBUG__
+#define LOG(...)\
+{\
+    printf("[DBG] " __VA_ARGS__);\
+    printf("\n");\
+}
+#else
+#define LOG
+#endif //!__DEBUG__
+
+// INCLUDES
+#include <stdio.h>
+#include <map>
+#include <iostream>
+#include <string>
+#include <utility>  
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+
+// EXTERNS
+extern FILE* yyin;
+extern int yylineno;
+
+extern char* yytext;
+extern int yyparse(void);
+extern int yylex(void);  
+extern int yywrap()
+{
+    return 1;
+}
+extern int yyerror(char * syntaxError);
+
+bool found_error=false;
+
+struct Any 
+{
+    char *var_type;
+    void * buffer;
+    char *var_scope;
+};
+std::map<char *, Any> symbol_table;
+
+int WriteFile(char *fname, std::map<char *, Any> m) 
+{
+    int count = 0;
+    FILE *fp = fopen(fname, "w");
+    if (!fp)
+        return -errno;
+    std::map<char *, Any>::iterator it ; 
+    for(it = symbol_table.begin(); it!=symbol_table.end(); ++it) 
+    {
+        fprintf(fp,"%s=%s type=%s val=%s \n",it->first,it->second.var_type,it->second.var_scope,it->second.buffer);
+        // printf("%s=%s type=%s val=%s \n",it->first,it->second.var_type,it->second.var_scope,it->second.buffer);
+        count++;
+    }
+
+    fclose(fp);
+    return count;
+}
+
+void add_new_var_symbol_type(char *name, char *type, char *scope, void *buffer)
+{
+    Any aux;
+    aux.var_type = type;
+    aux.buffer = buffer;
+    aux.var_scope = scope;
+    symbol_table.insert(std::pair<char *, Any>(name, aux));
+    printf("Declarata acum : %s\n",name);
+
+}
+
+int check_if_symbol_in_table(std::map<char *,Any> m, char *name)
+{
+    int count = 0;
+    std::map<char *, Any>::iterator it;
+    for(it = symbol_table.begin(); it!=symbol_table.end(); ++it) 
+    {
+        if(strcmp(it->first,name)==0)
+        {
+            printf("%s %s",it->first,name);
+            char aux[100]= "Eroare : Variabila cu numele ";
+            strcat(aux,name);
+            strcat(aux," a fost deja decalarata anterior!\n");
+            printf("%s",aux);
+            count++;
+        }
+    }
+    if(count)
+        found_error=true;
+    return count;
+}
+
+int add_symbol_in_table(std::map<char *,Any> m, char *name, char *type, char *scope, void *buffer)
+{
+    if(!check_if_symbol_in_table(m,name))
+    {
+        add_new_var_symbol_type(name,type,scope,buffer);
+    }
+    return 0;
+}
+
+char var_type[100];
+
+void verify_var_type(std::map<char *,Any> m, char *name)
+{
+    std::map<char *, Any>::iterator it;
+    for(it = symbol_table.begin(); it!=symbol_table.end(); ++it) 
+    {
+        if(strcmp(it->first,name)==0)
+        {
+            printf("%s %s",it->first,name);
+            strcpy(var_type,it->second.var_type);
+        }
+    }
+}
+
+%}
+
+%start progr
+
+%token TARRAY_USED_TYPE ETARRAY_USED_TYPE SEMICOLON
+%token OPERATOR_ASSIGN OPERATOR_AND OPERATOR_OR OPERATOR_PLUS OPERATOR_MINUS OPERATOR_MULTIPLY OPERATOR_DIVIDE OPERATOR_MOD OPERATOR_EQUAL
+%token OPERATOR_CONTROL_IF OPERATOR_CONTROL_WHILE OPERATOR_CONTROL_ELSE
+%token EVAL
+
+%union 
+    {
+        int union_value_int;
+        float union_value_float;
+        const char* union_value_string;
+        char union_value_char;
+        char* union_value_bool;
+    }
+
+%token <union_value_string> VALUE_STRING_CONST
+%token <union_value_char> VALUE_CHAR_CONST
+%token <union_value_string> ID
+%token <union_value_string> ID_OBJ
+%token <union_value_string> TYPE_INT
+%token <union_value_string> TYPE_FLOAT
+%token <union_value_string> TYPE_CHAR
+%token <union_value_string> TYPE_STRING
+%token <union_value_string> TYPE_USER_DEFINED
+%token <union_value_string> TYPE_ARRAY
+%token <union_value_string> TYPE_FUNC TYPE_BOOL
+%token <union_value_int> VALUE_INT_CONST
+%token <union_value_int> VALUE_INT_POZ_CONST
+%token <union_value_float> VALUE_FLOAT_CONST
+%token <union_value_float> VALUE_FLOAT_POZ_CONST
+%token <union_value_bool> VALUE_BOOL_CONST
+
+
+%type <union_value_int> expr_int
+%type <union_value_float> expr_float
+%type <union_value_string> expr_string
+%type <union_value_bool> expr_bool
+
+
+%right OPERATOR_ASSIGN
+%left OPERATOR_EQUAL
+%left OPERATOR_AND OPERATOR_OR
+%left OPERATOR_PLUS OPERATOR_MINUS
+%left OPERATOR_MULTIPLY OPERATOR_DIVIDE OPERATOR_MOD
+%left UMINUS
+
+%%
+
+progr   : program_interior 
+            {
+                if(found_error==false)
+                    printf("program corect sintactic\n");
+                else
+                {
+                    printf("program incorect sintactic\n");
+                }
+            }
+
+program_interior: program_interior instruction SEMICOLON
+                | program_interior eval SEMICOLON
+                | %empty
+                ;
+
+instruction : declaration
+            | function_definition
+            | statement
+            | control_operation
+            ;
+
+eval : EVAL '(' expr_int ')'
+     ;
+
+declaration : built_in_declaration
+            | user_defined_declaration
+            ;
+
+built_in_declarations   : built_in_declarations built_in_declaration SEMICOLON
+                        | built_in_declaration SEMICOLON
+                        ;
+
+built_in_declaration    : TYPE_INT ID
+                            {
+                                char* id=strdup($2);
+                                char* type=strdup($1);
+                                add_symbol_in_table(symbol_table,id,type,"global declaration",nullptr);
+                            }
+                        | TYPE_FLOAT ID
+                            {
+                                char* id=strdup($2);
+                                char* type=strdup($1);
+                                add_symbol_in_table(symbol_table,id,type,"global declaration",nullptr);
+                            }
+                        | TYPE_CHAR ID
+                            {
+                                char* id=strdup($2);
+                                char* type=strdup($1);
+                                add_symbol_in_table(symbol_table,id,type,"global declaration",nullptr);
+                            }
+                        | TYPE_STRING ID
+                            {
+                                char* id=strdup($2);
+                                char* type=strdup($1);
+                                add_symbol_in_table(symbol_table,id,type,"global declaration",nullptr);
+                            }
+                        | TYPE_ARRAY '<' type_general '>' ID 
+                            {
+                                char* id=strdup($5);
+                                char* type=strdup($1);
+                                add_symbol_in_table(symbol_table,id,type,"global declaration",nullptr);
+                            }
+                        | TYPE_BOOL ID
+                            {
+                                char* id=strdup($2);
+                                char* type=strdup($1);
+                                add_symbol_in_table(symbol_table,id,type,"global declaration",nullptr);
+                            }
+                        ;
+
+built_in_declarations_in_obj   : built_in_declarations_in_obj built_in_declaration_in_obj SEMICOLON
+                        | built_in_declaration_in_obj SEMICOLON
+                        ;
+
+built_in_declaration_in_obj : TYPE_INT ID
+                                {
+                                    char* id=strdup($2);
+                                    char* type=strdup($1);
+                                    add_symbol_in_table(symbol_table,id,type,"global declaration",nullptr);
+                                }
+                            | TYPE_FLOAT ID
+                                {
+                                    char* id=strdup($2);
+                                    char* type=strdup($1);
+                                    add_symbol_in_table(symbol_table,id,type,"global declaration",nullptr);
+                                }
+                            | TYPE_CHAR ID
+                                {
+                                    char* id=strdup($2);
+                                    char* type=strdup($1);
+                                    add_symbol_in_table(symbol_table,id,type,"global declaration",nullptr);
+                                }
+                            | TYPE_STRING ID
+                                {
+                                    char* id=strdup($2);
+                                    char* type=strdup($1);
+                                    add_symbol_in_table(symbol_table,id,type,"global declaration",nullptr);
+                                }
+                            | TYPE_ARRAY '<' type_general '>' ID 
+                                {
+                                    char* id=strdup($5);
+                                    char* type=strdup($1);
+                                    add_symbol_in_table(symbol_table,id,type,"global declaration",nullptr);
+                                }
+                            | TYPE_BOOL ID
+                                {
+                                    char* id=strdup($2);
+                                    char* type=strdup($1);
+                                    add_symbol_in_table(symbol_table,id,type,"global declaration",nullptr);
+                                }
+                            ;
+
+user_defined_declaration: TYPE_USER_DEFINED ID_OBJ '{' built_in_declarations_in_obj '}'
+                            {
+                                char* id=strdup($2);
+                                add_symbol_in_table(symbol_table,id,"user defined type","global declaration",nullptr);
+                            }
+                        ;
+
+function_definition : TYPE_FUNC ID_OBJ '(' params_list ')' '{' statements '}'
+                        {
+                            // char* id=strdup($2);
+                            // char* type=strdup($1);
+                            add_symbol_in_table(symbol_table,"id3","type","function declaration",nullptr);
+                        }
+                    | TYPE_FUNC ID_OBJ '(' ')' '{' statements '}' 
+                    ;
+
+params_list : params_list ',' declaration
+            | declaration
+            ;
+    
+statements  : statements statement SEMICOLON
+            | %empty
+            ;
+
+    /* trebuie regandit ce e mai exact un statement */
+statement   : ID OPERATOR_ASSIGN ID 
+                {
+                    char *id1=strdup($1);
+                    char *id2=strdup($3);
+                    if(check_if_symbol_in_table(symbol_table, id1) && check_if_symbol_in_table(symbol_table, id2))
+                    {
+                        printf("%s -> %s",id1,var_type);
+                        LOG("statement");
+                    }
+                    else
+                    {
+                        printf("Acest statement nu se poate efectua!\n");
+                    }
+                }
+            | ID OPERATOR_ASSIGN expr
+                {
+                    char *id1=strdup($1);
+                    // char *id2=strdup($3);
+                    // if(check_if_symbol_in_table(symbol_table, id1))
+                    // {
+                    //     LOG("statement");
+                    // }
+                    // else
+                    // {
+                    //     printf("Acest statement nu se poate efectua!\n");
+                    // }
+                }
+            ;            
+
+type_general: TYPE_INT 
+            | TYPE_FLOAT 
+            | TYPE_CHAR 
+            | TYPE_STRING 
+            | TYPE_ARRAY '<' type_general '>'  
+            | TYPE_BOOL
+            ;
+
+control_operation   : OPERATOR_CONTROL_IF '(' operation_inside_control ')' '{' statements '}'
+                    | OPERATOR_CONTROL_WHILE '(' operation_inside_control ')' '{' statements '}'
+                    ;
+
+operation_inside_control: VALUE_BOOL_CONST
+                        ;
+
+expr: expr_int
+    | expr_float
+    | expr_bool
+    | expr_string
+    ;
+
+expr_int: '(' expr_int ')' 
+            {
+                $$ = $2;
+                LOG("expr_int = (%d)", $2);
+            }
+        | expr_int OPERATOR_PLUS expr_int
+            {
+                $$ = $1 + $3;
+                LOG("expr_int = %d + %d = %d", $1, $3, $$);
+            }
+        | expr_int OPERATOR_MULTIPLY expr_int 
+            {
+                $$ = $1 * $3;
+                LOG("expr_int = %d * %d = %d", $1, $3, $$);
+            }
+        | '-' expr_int        %prec UMINUS
+            {
+                $$ = -$2;
+                LOG("expr_int = %d", $$);
+            }
+        | VALUE_INT_CONST     
+            {
+                $$ = $1;
+                LOG("expr_int = %d", $1);
+            }        
+        ;
+
+expr_float  : '(' expr_float ')' 
+                    {
+                        $$ = $2;
+                        LOG("expr_float = (%f)", $$);
+                    }
+                | expr_float OPERATOR_PLUS expr_float
+                    {
+                        $$ = $1 + $3;
+                        LOG("expr_float = %f + %f = %f", $1, $3, $$);
+                    }
+                | expr_float OPERATOR_MULTIPLY expr_float 
+                    {
+                        $$ = $1 * $3;
+                        LOG("expr_float = %f * %f = %f", $1, $3, $$);
+                    }
+                | '-' expr_float        %prec UMINUS
+                    {
+                        $$ = -$2;
+                        LOG("expr_float = %f", $$);
+                    }
+                | VALUE_FLOAT_CONST     
+                    {
+                        $$ = $1;
+                        LOG("expr_float = %f", $$);
+                    }
+                // | ID
+                //     {
+                //         LOG("ID %s = expr_float", $1);
+                //     }       
+                ;
+
+
+expr_string: '(' expr_string ')'
+            {
+                $$ = $2;
+                LOG("expr_string = (%s)", $2);
+            }
+        | expr_string OPERATOR_PLUS expr_string  
+            {   
+                char* s=strdup($1);
+                strcpy(s+strlen(s)-1,s+strlen(s));
+                char* s1=strdup($3);
+                strcpy(s1,s1+1);
+                strcat(s,s1);
+                $$=s;
+                LOG("%s + %s = %s", $1, $3, $$);
+            }   
+        | VALUE_STRING_CONST 
+            {
+                $$=strdup($1);
+                char *a=strdup($1);
+                LOG("%s", $1);
+            }
+        ;
+
+expr_bool   : '(' expr_bool ')' 
+            {
+                $$ = $2;
+                LOG("expr_bool = (%s)", $2);
+            }
+            | expr_bool OPERATOR_PLUS expr_bool
+                {
+                    char* s1=strdup($1);
+                    char* s2=strdup($3);
+                    if(strcmp(s1,s2)<0)
+                    {
+                        $$=s2;
+                    }
+                    else
+                    {
+                        $$=s1;
+                    }
+                    LOG("expr_bool = %s + %s = %s", $1, $3, $$);
+                }
+            | expr_bool OPERATOR_MULTIPLY expr_bool 
+                {
+                    char* s1=strdup($1);
+                    char* s2=strdup($3);
+                    if(strcmp(s1,s2)==0)
+                    {
+                        $$=s1;
+                    }
+                    else
+                    {
+                        char* s3="'false'";
+                        $$=s3;
+                    }
+                    LOG("expr_bool = %s * %s = %s", $1, $3, $$);
+                }
+            | '-' expr_bool        %prec UMINUS
+                {
+                    char* s1=strdup($2);
+                    if(strcmp(s1,"false")==0)
+                    {
+                        char* s2;
+                        strcpy(s2,"'true'");
+                        $$=s2; 
+                    }
+                    else
+                    {
+                        char* s2;
+                        strcpy(s2,"'false'");
+                        $$=s2;
+                    }
+                    LOG("expr_bool = -%s = %s", $2, $$);
+                }
+            | VALUE_BOOL_CONST     
+                {
+                    $$ = $1;
+                    LOG("expr_bool -> %s", $1);
+                }        
+            ;
+
+%%
+int yyerror(char * s)
+{
+    printf("eroare: %s la linia:%d\n",s,yylineno);
+    found_error = true;
+}
+
+int main(int argc, char** argv)
+{
+    yyin=fopen(argv[1],"r");
+    yyparse();
+    WriteFile("symbol_table.txt",symbol_table);
+    
+} 

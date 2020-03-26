@@ -1,0 +1,356 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage[version=3]{mhchem} % Package for chemical equation typesetting
+\usepackage{siunitx} % Provides the \SI{}{} and \si{} command for typesetting SI units
+\usepackage{graphicx} % Required for the inclusion of images
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage[utf8x]{inputenc} 
+\usepackage{booktabs}
+\usepackage{tabto}
+
+
+\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Results of genetic algorithm \\ on finding the minimum of a function} % Title
+
+\author{Andrei \textsc{Ianău}} % Author name
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+\begin{center}
+\begin{tabular}{l r}
+Date Performed: & \date{23/11/2019} \\ % Date the experiment was performed
+Professor: & Croitoru Eugen % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+
+
+This homework provides the introduction to genetic algorithms.
+These algorithms model Darwinian genetic inheritance and struggle for survival. Along with two other directions: evolutionary strategies and evolutionary programming, they form the class of evolutionary algorithms.
+It focuses on the aspect of achieving a 94\% success in finding the minimum of a function. 
+Results are as expected in the good range of expecations. The average is better, the minimum is better and an overall improvement in time is considerably bigger and this allows us to push the limits of computing power and reevaluate the negotiation between speed and accuracy.
+
+
+\end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Objective}
+
+Determine which approach is better for getting the minimum for the next functions.
+\begin{enumerate}
+	\item Booth
+	\item Eusom
+	\item Shubert
+	\item Rastrigin
+\end{enumerate}
+
+
+\subsection{Definitions}
+\label{definitions}
+\begin{description}
+\item[Booth Function]
+
+\begin{equation}
+f(X)=\left(x_1+2x_2-7\right)^2+\left(2x_1+x_2-5\right)^2
+\end{equation}
+
+\item[Eusom Function]
+
+\begin{equation}
+f(x,y)=−cos(x_1)cos(x_2) exp(−(x − \pi)^2−(y − \pi)^2)
+\end{equation}
+
+\item[Shubert Function]
+
+\begin{equation}
+f(\mathbf{x})=f(x_1, ...,x_n)=\prod_{i=1}^{n}{\left(\sum_{j=1}^5{ cos((j+1)x_i+j)}\right)}
+\end{equation}
+
+\item[Rastrigin Function]
+
+\begin{equation}
+f(x, y)=10n + \sum_{i=1}^{n}(x_i^2 - 10cos(2\pi x_i))
+\end{equation}
+
+\end{description} 
+ 
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Setup}
+
+Evolutionary algorithms use a vocabulary borrowed from genetics:\\
+The evolution is simulated by a succession of generations of a population of candidate solutions;\\
+A candidate solution is called a chromosome and is represented as a gene string; ( in our case, implemented as Bitstring) \\
+The gene is the atomic information of a chromosome;  (in our case, the bit)\\
+The position a gene occupies is called a locus; \\
+All possible values for a gene form the set of alleles of the gene; \\
+The population evolves by applying genetic operators: mutation (we mutate with a chance of 0.01\%)  and crossbreeding (we crossbreed two individuals by swapping the gense from index ind1 to ind2, indexes that are randomly generated); \\
+The chromosome to which a genetic operator is applied is called a parent and the resulting chromosome is called a descendant; \\
+Selection is the procedure by which the chromosomes are chosen that will survive in the next generation; better adapted individuals will be given greater chances; 
+Here we use the wheel of fortune. \\
+The degree of adaptation to the environment is measured by the fitness function;\\
+The solution returned by a genetic algorithm is the best individual of the last generation. \\
+The experiment is done within 2, 5 and 30 dimensions.\\ 
+For each dimension, each function will be ran with a deterministic aproach to find the minimum.\\
+The final results will be composed of the minimum from all of these 30 runs.\\
+
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Sample Calculation}
+
+
+
+%----------------------------
+%	 2   DIMENSIONS
+%----------------------------
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{2 Dimensions - Genetic Algorithm} \\
+\hline
+ Function \textbackslash Value 	&	 	 F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		0.00001		& 		0.03786			& 	0.09468178				 & 4.00765	 \\
+ \hline
+ Easom					&		-0.9999837		& 		-0.4404394			& 		0.4160743  &	  	-0.3384428\\
+ \hline
+ Shubert					&		0.0001404771		& 		 	0.129941		& 		0.1605601	&	0.06866111\\
+ \hline
+ Rastrigin					&		0.0004495805		& 		0.87353			& 		0.8240688		 &0.5921164\\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{2 Dimensions - Hill Climbing} \\             
+\hline
+ Function \textbackslash Value 	&	 	 F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		2		& 		 20.33818		& 		30.17318		 &	  	6.500013			\\
+ \hline
+ Easom					&		-1		& 		 -0.4330835			& 		0.5037164			 &-2.7e-09	\\
+ \hline
+ Shubert					&		0.01151226		& 		 40.62198			& 			22.8239 &58.68443\\
+ \hline
+ Rastrigin					&		1e-10		& 		3.134486 			& 		3.481765			 &1.994961	\\
+ \hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{2 Dimensions - Simulated Annealing} \\
+\hline
+ Function \textbackslash Value 	&	 	 F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		4.07222		& 		586.9657 			& 	544.5047				 &394.3619	 \\
+ \hline
+ Easom					&		-5e-10		& 		 -3.333333e-11			& 		1.268541e-10&	  	0\\
+ \hline
+ Shubert					&		0.3571665		& 		 	77.25411		& 		30.87428	&	76.6366\\
+ \hline
+ Rastrigin					&		4.365741		& 		 41.54321			& 		22.93483		 &40.4976\\
+ \hline
+\end{tabular}
+\end{center}
+
+
+
+
+%----------------------------
+%	 5   DIMENSIONS
+%----------------------------
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{5 Dimensions - Genetic Algorithm} \\
+\hline
+ Function \textbackslash Value 	&	 	 F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		0		& 		0.08409 			& 	0.1978363				 &0.01643	 \\
+ \hline
+ Easom					&		-0.9999837		& 		-0.4404394			& 		0.4160743  &	  	-0.3384428\\
+ \hline
+ Shubert					&		 -60.99586		& 		 	-58.58381		& 		38.42919	&	-60.02898\\
+ \hline
+ Rastrigin					&		0.008684981		& 		 2.684578			& 		2.697075		 &2.006103\\
+ \hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{5 Dimensions  - Hill Climbing} \\
+\hline
+ Function \textbackslash Value 	&	 	 F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		2		& 		 17.51634			& 		28.78196	&	2.281252			\\
+ \hline
+ Easom					&		-1		& 		 	-0.5996907		& 		 0.4980161			 &	 -0.9991743\\
+ \hline
+ Shubert					&		-60.99756		& 		 	-37.25598		& 		27.28942	 		&-59.97212\\
+ \hline
+ Rastrigin					&	4e-10			& 		 10.49341			& 		12.28039			 &	 5.589442	\\
+ \hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{5 Dimensions  - Simulated Annealing} \\
+\hline
+ Function \textbackslash Value 	&	 	 F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		13.7936		& 		726.852 			& 		 698.0556	 &	465.2658\\
+ \hline
+ Easom					&		0		& 		 	0		& 			0		 &	0  	\\
+ \hline
+ Shubert					&		-60.55382		& 		 -29.02078& 		16.39637&	 6.98384	\\
+ \hline
+ Rastrigin					&		9.244849		& 		 86.36404& 		54.92566			 &	66.9411  	\\
+ \hline
+\end{tabular}
+\end{center}
+
+
+%----------------------------
+%	 30   DIMENSIONS
+%----------------------------
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{30 Dimensions - Genetic Algorithm} \\
+\hline
+ Function \textbackslash Value 	&	 	 F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		0.0016		& 		0.4937			& 	0.9045064				 & 0.1139	 \\
+ \hline
+ Easom					&		-0.9991982		& 		-0.4894756			& 		0.3770736 &	  	-0.4704943\\
+ \hline
+ Shubert					&		0		& 		 	359518206		& 		1965699108	&	2.555e-08\\
+ \hline
+ Rastrigin					&		0.000863329		& 		10.25588			& 		12.42419		 &4.304968\\
+ \hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline
+\multicolumn{5}{|| c ||}{30 Dimensions  - Hill Climbing} \\
+\hline
+ Function \textbackslash Value 	&	  F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		2		& 		 19.72947			& 		30.50142&2.281252			\\
+ \hline
+ Easom					&		-1		& 		 -0.3331948			& 		 0.4792641			 &-2.7e-09\\
+ \hline
+ Shubert					&		0		& 		 	2.634213e+20		& 		1.002482e+21	 		& 0 \\
+ \hline
+ Rastrigin					&		1.5e-09		& 		 40.01471			& 		40.76614			 & 24.71551\\
+ \hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{30 Dimensions  - Simulated Annealing} \\
+\hline
+ Function \textbackslash Value 	& F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		3.885553	& 		616.2707 			& 	706.4712	 &342.4231	 \\
+ \hline
+ Easom					&		0		& 		 0			& 		0			 & 0	\\
+ \hline
+ Shubert					&		163464.2		& 		 1.259035e+36			& 	3.919845e+36& 6.631709e+25\\
+ \hline
+ Rastrigin					&		21.36679		& 		 408.8735			& 		219.8453			 &389.8166 \\
+ \hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{Bonus: 30 Dimensions 1000 pop- Genetic Algorithm} \\
+\hline
+ Function \textbackslash Value 	&	 	 F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Rastrigin					&		5.676e-07		& 		0.2550468			& 		0.4268485		 &0.110391\\
+ \hline
+\end{tabular}
+\end{center}
+
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+
+\section{Conclusion}
+
+The genetic algorithm gives us a better overall result. The genetic algorith is more stable, because it mimics the conservative nature of natural selection. What is best is kept and the bad things are discarded. The interesting part is when we compare Rastrigin results for 30 Dimensions. The results have an improved average, an improved standard deviation and mean, not to say that we found a better minimum value.
+This opens the possibility to push the bounderies of such algorithms. As a bonus, I tried to run the algorithm with a population size of 1000 population. We see that it is drastically improved by the number of candidates in a generation. But there is a drawback. The time that it took to run is a lot bigger ( raised from 3 mins to 6 days to run all 30 runs). This allows us to better take decisions when it comes to deciding which is more important: speed or accuracy.
+
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 5
+%----------------------------------------------------------------------------------------
+
+
+
+\section{Bibliography}
+
+$http://www.cs.stir.ac.uk/~goc/papers/PPSN10FirstImprLON.pdf$
+
+$https://profs.info.uaic.ro/~pmihaela/GA/FL.html$
+
+$https://tex.stackexchange.com/questions/43008/absolute-value-symbols$
+
+
+
+
+\end{document}

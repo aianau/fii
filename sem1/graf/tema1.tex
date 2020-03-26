@@ -1,0 +1,194 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage[version=3]{mhchem} % Package for chemical equation typesetting
+\usepackage{siunitx} % Provides the \SI{}{} and \si{} command for typesetting SI units
+\usepackage{graphicx} % Required for the inclusion of images
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage[utf8x]{inputenc} 
+\usepackage{booktabs}
+\usepackage{tabto}
+\usepackage{amssymb}
+\usepackage{listings}
+
+\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Tema 1} % Title
+
+\author{Shanti \textsc{Zmuschi} și Andrei \textsc{Ianău}} % Author name
+
+\date{08/11/2019}
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+\begin{center}
+\begin{tabular}{l r}
+Profesor: &  Olariu E. Florentin \\ % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+
+
+%----------------------------------------------------------------------------------------
+%	Problema 1
+%----------------------------------------------------------------------------------------
+
+\section*{Problema 1}
+(a)
+"=\textgreater" Prin blocarea oricărei străzi, rețeaua stradală nu se deconectează, rezultă că între oricare două intersecții 
+există cel puțin două lanțuri distincte, rezultă că putem să orientăm muchiile grafului inițial astel încât graful orientat rezultat să fie tare conex.\\
+
+"\textless=" Putem să orientăm muchiile grafului inițial astfel încât graful orientat rezultat să fie tare conex, rezultă că în graful inițial, între oricare două noduri distincte există cel puțîn două lanțuri distincte, înseamnă că prin blocarea oricărei străzi, rețeaua stradală nu se deconectează.
+
+(b)
+\begin{lstlisting}[escapeinside={(*}{*)}]
+ 
+def DFS( V, E, E', u, visited):
+	visited[u]  = 1
+	for (n in V) do
+		if ( (n, u) in E) then 
+			E' = E' (*$\cup$*) {(u,n)}
+			E = E - {(u,n)}
+			if (visited[n] == 0) then
+				DFS(V, E, E', n, visited)
+
+E' = E
+i = 1
+while( i < length(V)) do
+	visited[i] = 0
+DFS( V, E, E', 1, visited)
+return (V, E')
+\end{lstlisting}
+Complexitate  totală: $nm\log_2 m$ sau $n(n-1)$, depinzând de cum alegem să reprezentăm în memorie (ca strucutră de date).
+%----------------------------------------------------------------------------------------
+%	Problema 2
+%----------------------------------------------------------------------------------------
+
+\section*{Problema 2}
+
+% Fie G = (V, E) un graf conex si u, v \in V doua noduri distincte ale lui G. O submultime de noduri X se numeste uv-separatoare minimala daca u si v se afla in componente conexe diferite ale lui G - X', dar pentru orice X' \subsetneq X, u si v sunt in aceeasi componenta a lui G - X'.
+(a)
+
+X $\subset$ V este o mulțime uv-separatoare minimală dacă și numai dacă\\
+1) u și v se afla în componente diferite ale lui G-X         (C) \\
+2) $\forall$  X'  $\subsetneq$  X, u și v sunt în aceeași componentă a lui G-X'     (A)
+
+Deci, cerință se reduce la $\forall$ X' $\subsetneq$ X, u și v sunt în aceeași componentă a lui G-X'  $\iff$ orice nod din X are vecini în ambele componente (B)
+
+Din (A) rezultă că $\forall$ n $\in$ X, u și v sunt în aceeași componentă a lui G-X + \{n\} dar u și v se afla în componente diferite ale lui G-X, rezultă că $\exists$ u', v' $\in$ G-X astfel încât :\\
+i) u' și u sunt în aceeași componentă a lui G-X \\ 
+îi) v' și v sunt în aceeași componentă a lui G-X \\
+iii) (u', n) $\in$ E \\
+iv) (v', n) $\in$ E \\
+
+Rezultă că n are vecini în ambele componente, rezultă că din (B) și (C), avem ce trebuia demonstrat.
+
+
+%----------------------------------------------------------------------------------------
+%	Problema 3
+%----------------------------------------------------------------------------------------
+
+\section*{Problema 3}
+
+(a)
+\begin{lstlisting}[escapeinside={(*}{*)}]
+ 
+for (i in V) do
+	d[i] = 0
+	V'[i] = 1
+for ((i,j) in E) do
+	d[i] = d[i] + 1
+	d[j] = d[j] + 1
+
+d = bucketSort(d)
+index = 1
+while(d[index] <= m/n) do
+	V'[index] = 0
+	index = index + 1
+
+i = 1
+while (i <= length(E)) do
+	E'[i] = 1
+
+x = 1
+while(x <= length(E)) do
+	(i,j) = E[x]
+	if (V[i] == 0) then
+		E'[x] = 0
+	if (V[j] == 0) then
+		E'[x] = 0
+
+finalV = [], finalE = []
+i = 1, index = 1
+while(i <= length(V)) do
+	if(V'[i] == 1) then 
+		finalV[index] = i
+		index = index+1
+i = 1, index = 1
+while(i <= length(E)) do
+	if(E'[i] == 1) then 
+		finalE[index] = i
+		index = index+1
+
+return (finalV, finalE)
+
+\end{lstlisting}
+Complexitate  totală: $max(n,m)$
+
+(b)
+Presupunem prin reducere la absurd că graful G' nu are noduri, rezultă că toate nodurile din G aveau $d(x) < m/n \Rightarrow \sum_{i=1}^{n} < n(m/n) \iff 2m < m $  (Fals). Înseamnă că presupunerea făcută este falsă, ceea ce înseamnă că G' are noduri.
+
+Presupunem prin reducere la absurd că graful G' nu are muchii, ceea ce înseamnă că $d(x) = 0, \forall x \in G'$
+
+Dar $ d(x) \geq m/n, \forall x \in G' $ (din modul în care îl construim pe G') înseamnă că presupunerea făcută este falsă, deci G' are muchii.
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	Problema 4
+%----------------------------------------------------------------------------------------
+
+\section*{Problema 4}
+
+(a)
+
+Dacă $\exists x_0 \in V $ astfel încât toate celelalte noduri sunt accesibile din $x_0$, atunci putem lua în considerare doar muchiile care aparțin drumurilor de cost minim de la  $x_0$ la orice alt nod ca fiind E'. Este clar că  $E' \subseteq E$. Dacă analizăm graful G' = (V, E'), putem observa că el nu conține cicluri ( drumurile de cost minim nu conțin cicluri care au cost nenegative și funcția a are codomeniul $ \Bbb R_{\ge 0} $, deci toate costurile vor fi nenegative). Având în vedere că graful G' conține drumuri de la $x_0$ la orice alt nod, acesta este conex, toate drumurile având ca element comun nodul $x_0$, acesta poate fi considerat ca fiind rădăcină arborelui G'', care e graful siport al lui G'. G'' este arbore fiindcă e graf conex și fără cilcuri. Cum G' conține doar drumurile de cost minim de la   $x_0$ la toate celelalte noduri, drumul de la   $x_0$ la u în G' are costul egal cu cel al drumului de cost minim de la   $x_0$ la u în G, $ \forall u \in V$. Cum aceste costuri se pastreasa și în arborele G'', G'' este SP-arbore. \\
+
+
+(b)
+\begin{lstlisting}[escapeinside={(*}{*)}]
+ 
+def SP():
+	for (v in V) do
+		c[v] = {v}
+	for (i in V) do
+		for (j in V) do
+			if ((i,j) in E) then
+				priorityq = priorityq (*$\cup$*) {a(ij):(i,j)}
+	
+	E' = (*$\oslash$*)
+	while (length(E) < n-1) do
+		(u,v) = priorityq.eliminaMin()
+		if (c(v) (*$\neq$*) c(u)) then 
+			E' = E' (*$\cup$*) {(u,v)}
+			var = c(v)
+			c(v) = c(v) (*$\cup$*) c(u)
+			c(u) = c(u) (*$\cup$*) var
+
+
+	return (V, E')
+
+\end{lstlisting}
+
+\end{document}

@@ -1,0 +1,47 @@
+#		ENVIRONMENT
+**.vscode
+**.vs
+**.idea
+
+**.sdf
+**.opensdf
+**.suo    
+**.py
+**.pyc    
+**Debug
+**x64
+**Release
+**bin
+**.txt 
+**.vcxproj.user   
+**.sln
+**.bin
+**.exe
+**.out
+**.ini
+**.crt
+**.bat
+**.ppk
+**.log
+**.vs
+**.sdf
+**.RData
+**.Rhistory
+**.gz
+**.zip
+**.result
+**.a
+
+# 		GRAFURI
+/graf/**
+
+# 		LFAC
+**.yy.c
+*.o
+**/y.tab.c
+**/y.tab.h
+**/lex.yy.c
+
+
+# 		JAVA
+**.jar

@@ -1,0 +1,258 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage[version=3]{mhchem} % Package for chemical equation typesetting
+\usepackage{siunitx} % Provides the \SI{}{} and \si{} command for typesetting SI units
+\usepackage{graphicx} % Required for the inclusion of images
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage[utf8x]{inputenc} 
+\usepackage{booktabs}
+\usepackage{tabto}
+
+
+\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Deterministic and Heuristic apprroach \\ on finding the minimum of a function} % Title
+
+\author{Andrei \textsc{Ianău}} % Author name
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+\begin{center}
+\begin{tabular}{l r}
+Date Performed: & \date{28/10/2019} \\ % Date the experiment was performed
+Professor: & Croitoru Eugen % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+
+This homework provides the introduction to genetic algorithms. It focuses on the aspect of modelling number candidates in a specific way, such as BitStrings. The operations are performed at bit level and will determine the specific evolution for all our number candidates. In this homework there will be two approaches: Hill Climbing and Simulated Annealing. The results will be compared and determine which approach works better on getting the minimum on specific functions in 2, 5 and 20 dimensions.
+
+\end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Objective}
+
+Determine which approach is better for getting the minimum for the next functions.
+\begin{enumerate}
+	\item Booth
+	\item Eusom
+	\item Shubert
+	\item Rastrigin
+\end{enumerate}
+
+
+\subsection{Definitions}
+\label{definitions}
+\begin{description}
+\item[Booth Function]
+
+\begin{equation}
+f(X)=\left(x_1+2x_2-7\right)^2+\left(2x_1+x_2-5\right)^2
+\end{equation}
+
+\item[Eusom Function]
+
+\begin{equation}
+f(x,y)=−cos(x_1)cos(x_2) exp(−(x − \pi)^2−(y − \pi)^2)
+\end{equation}
+
+\item[Shubert Function]
+
+\begin{equation}
+f(\mathbf{x})=f(x_1, ...,x_n)=\prod_{i=1}^{n}{\left(\sum_{j=1}^5{ cos((j+1)x_i+j)}\right)}
+\end{equation}
+
+\item[Rastrigin Function]
+
+\begin{equation}
+f(x, y)=10n + \sum_{i=1}^{n}(x_i^2 - 10cos(2\pi x_i))
+\end{equation}
+
+\end{description} 
+ 
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Setup}
+
+The language that tha algorith is written is \emph{C++} to improve the speed.\\
+Simple data structure were used: simple variables, matrices.\\
+
+The experiments are done within 2, 5 and 20 dimensions. 
+For each dimension, each function will be ran with a deterministic aproach to find the minimum.
+The non-deterministic aproach will be composed of 10000 runs of a random input and taken the minimum from all of these 30 runs.\\
+
+Hill Climbing approach:
+Each run cosists of an evloutionary algorithm that is described like this: \\
+Each candidate is represented in bitstring. His evaluation is done by transforming it into a real number and given as parameter into the specific function.
+A run represents an evolution of the candidate. The evolution is represented by having the candidate's bits changed, becoming a neighbour. 
+By changing (negating) a single bit from the candidate we find ourselves with one of his n neighbours (if he has n bits).\\
+The candidate evolves into the neighbour only if
+\begin{equation}
+ eval(decoded(candidate)) > eval(decoded(neighbour)).
+\end{equation}
+
+Simulated Annealing approach: 
+In addition to the HC method, the simmulated annealing lets the algorithm make "involutions". 
+When our evolving algorithm checks  if expression (5), if the statements is false,  it allows to involve into neighbour 
+if 
+\begin{equation}
+random[0,1) < exp(-abs(eval(decoded(candidate))-eval(decoded(neighbour))|)/T)
+\end{equation}, where T is a temperature which on each run is decreased by a factor of 25\%.\\
+
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Sample Calculation}
+
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{2 Dimensions - Hill Climbing} \\
+\hline
+ Function \textbackslash Value 	&	 	 F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		2		& 		 20.33818		& 		30.17318		 &	  	6.500013			\\
+ \hline
+ Easom					&		-1		& 		 -0.4330835			& 		0.5037164			 &-2.7e-09	\\
+ \hline
+ Shubert					&		0.01151226		& 		 40.62198			& 			22.8239 &58.68443\\
+ \hline
+ Rastrigin					&		1e-10		& 		3.134486 			& 		3.481765			 &1.994961	\\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{2 Dimensions - Simulated Annealing} \\
+\hline
+ Function \textbackslash Value 	&	 	 F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		4.07222		& 		586.9657 			& 	544.5047				 &394.3619	 \\
+ \hline
+ Easom					&		-5e-10		& 		 -3.333333e-11			& 		1.268541e-10&	  	0\\
+ \hline
+ Shubert					&		0.3571665		& 		 	77.25411		& 		30.87428	&	76.6366\\
+ \hline
+ Rastrigin					&		4.365741		& 		 41.54321			& 		22.93483		 &40.4976\\
+ \hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{5 Dimensions  - Hill Climbing} \\
+\hline
+ Function \textbackslash Value 	&	 	 F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		2		& 		 17.51634			& 		28.78196	&	2.281252			\\
+ \hline
+ Easom					&		-1		& 		 	-0.5996907		& 		 0.4980161			 &	 -0.9991743\\
+ \hline
+ Shubert					&		-6099756		& 		 	-3725598		& 		2728942	 		&-5997212\\
+ \hline
+ Rastrigin					&	4e-10			& 		 10.49341			& 		12.28039			 &	 5.589442	\\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{5 Dimensions  - Simulated Annealing} \\
+\hline
+ Function \textbackslash Value 	&	 	 F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		13.7936		& 		726.852 			& 		 698.0556	 &	465.2658\\
+ \hline
+ Easom					&		0		& 		 	0		& 			0		 &	0  	\\
+ \hline
+ Shubert					&		-6055382		& 		 -290207.8& 		1639637&	 6.098384	\\
+ \hline
+ Rastrigin					&		9.244849		& 		 86.36404& 		54.92566			 &	66.9411  	\\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{20 Dimensions  - Hill Climbing} \\
+\hline
+ Function \textbackslash Value 	&	  F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		2		& 		 19.72947			& 		30.50142&2.281252			\\
+ \hline
+ Easom					&		-1		& 		 -0.3331948			& 		 0.4792641			 &-2.7e-09\\
+ \hline
+ Shubert					&		0		& 		 	2.634213e+20		& 		1.002482e+21	 		& 0 \\
+ \hline
+ Rastrigin					&		1.5e-09		& 		 40.01471			& 		40.76614			 & 24.71551\\
+ \hline
+\end{tabular}
+\end{center}
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c ||}
+\hline 
+\multicolumn{5}{|| c ||}{20 Dimensions  - Simulated Annealing} \\
+\hline
+ Function \textbackslash Value 	& F min 		& 	 	F Mean		& 	 	 F StdDev		&		F Avg			\\
+ \hline
+ Booth						&		3.885553	& 		616.2707 			& 	706.4712	 &342.4231	 \\
+ \hline
+ Easom					&		0		& 		 0			& 		0			 & 0	\\
+ \hline
+ Shubert					&		163464.2		& 		 1.259035e+36			& 	3.919845e+36& 6.631709e+25\\
+ \hline
+ Rastrigin					&		21.36679		& 		 408.8735			& 		219.8453			 &389.8166 \\
+ \hline
+\end{tabular}
+\end{center}
+
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+
+\section{Conclusion}
+
+In the case of Booth function in all dimensions we see that the HC algorithm is better. This is the cause of a smooth and "predictable" curve nature of the function. 
+
+In the case of Easom function, the result is understandable because if we allow even the smallest involution, the chance of getting the minimum decreases drastically, cause of the nature of the function.
+
+In the case of Shubert function, we see a lot of different values with a big difference between them. My attention is mostly attracted by the 20 dimension results which seem to be the cause of high number of local minima. 
+
+In case of Rastrigin function, the HC is better because the involution also determines a step back into a local minima and the function seems to respond better to constant evolution.
+
+\end{document}

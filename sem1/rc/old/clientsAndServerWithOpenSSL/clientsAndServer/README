@@ -1,0 +1,9 @@
+## COMMANDS TO RUN.
+
+openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout server_cert.pem -out server_cert.pem
+openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout client_cert.pem -out client_cert.pem
+
+make all
+
+sudo ./server <PORT>
+client <IP_to_connect_to> <PORT>

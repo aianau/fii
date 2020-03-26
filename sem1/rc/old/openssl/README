@@ -1,0 +1,6 @@
+openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout certi.pem -out certi.pem
+gcc -Wall -o server server.c -L/usr/lib -lssl -lcrypto
+gcc -Wall -o client client.c -L/usr/lib -lssl -lcrypto
+
+sudo ./server <PORT>
+client <IP_to_connect_to> <PORT>

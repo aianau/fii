@@ -1,0 +1,138 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage[version=3]{mhchem} % Package for chemical equation typesetting
+\usepackage{siunitx} % Provides the \SI{}{} and \si{} command for typesetting SI units
+\usepackage{graphicx} % Required for the inclusion of images
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage[utf8x]{inputenc} 
+\usepackage{booktabs}
+\usepackage{tabto}
+
+
+\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Deterministic and Heuristic apprroach \\ on finding the minimum of a function} % Title
+
+\author{Andrei \textsc{Ianău}} % Author name
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+\begin{center}
+\begin{tabular}{l r}
+Date Performed: & \date{28/10/2019} \\ % Date the experiment was performed
+Professor: & Croitoru Eugen % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+
+This homework provides the introduction to genetic algorithms. It focuses on the aspect of modelling number candidates in a specific way, such as BitStrings. The operations are performed at bit level and will determine the specific evolution for all our number candidates. In this homework there will be two approaches: Hill Climbing and Simulated Annealing. The results will be compared and determine which approach works better on getting the minimum on specific functions in 2, 5 and 20 dimensions.
+
+\end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Objective}
+
+Determine which approach is better for getting the minimum for the next functions.
+
+		\begin{equation}
+		f(X)=x^3-60x^2+900x+100
+		\end{equation}
+ 
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Setup}
+
+The language that tha algorith is written is \emph{C++} to improve the speed.\\
+Simple data structure were used: simple variables, matrices.\\
+
+The function is ran with a non-deterministic aproach to find the minimum.
+The aproache will be composed of 10000 runs of a random input and taken the minimum from all of these 30 runs.\\
+
+Hill Climbing approach (best improvement and first improvement):
+Each run consists of an evloutionary algorithm that is described like this: \\
+Each candidate is represented in bitstring. His evaluation is done by transforming it into a real number and given as parameter into the specific function.
+A run represents an evolution of the candidate. The evolution is represented by having the candidate's bits changed, becoming a neighbour. 
+By changing (negating) a single bit from the candidate we find ourselves with one of his n neighbours (if he has n bits).\\
+The candidate evolves into the neighbour only if
+\begin{equation}
+ eval(decoded(candidate)) > eval(decoded(neighbour)).
+\end{equation}
+The best improvement approach goes trrough all the possible neighbours while the first improvement takes the first evolution and goes with it.
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Sample Calculation}
+
+
+\begin{center}
+ \begin{tabular}{||c || c | c | c | c | c ||}
+\hline
+ Values 			&	 	 F min 			& 	 	F Mean		& 	 	 F StdDev		&		F Avg		 &    Time		\\
+ \hline
+ Tema1p - first improvement  &		101.2801		& 		 2116.08		& 		1388.844		 &		2140.977	&	~3s	\\
+ \hline
+ Tema1p - best improvement  &		100.6147		& 		 2275.906		& 		1571.104		 &	  	2472.375	&	~10s	\\
+ \hline
+
+\end{tabular}
+\end{center}
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+
+\section{Conclusion}
+
+We see that the result are very similar, but with a significant time difference. The main cause of this phenomenon is that the best improvement searches exhaustively through all neighbours, while the first improvement takes the first better neighbour and passes over the ones that could or couldn't be better. 
+Also, the results are similar (as function results), cuase of the function's simplicity and its steepness.
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 5
+%----------------------------------------------------------------------------------------
+
+
+
+\section{Bibliography}
+
+$http://www.cs.stir.ac.uk/~goc/papers/PPSN10FirstImprLON.pdf$
+
+$https://profs.info.uaic.ro/~pmihaela/GA/FL.html$
+
+$https://tex.stackexchange.com/questions/43008/absolute-value-symbols$
+
+
+\end{document}
