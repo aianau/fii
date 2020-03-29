@@ -5,11 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
-import javafx.scene.shape.Circle;
-import javafx.scene.transform.MatrixType;
 import javafx.stage.Stage;
-import sample.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,20 +47,18 @@ public class Main extends Application {
                 new Player("Maria", board)
         ).collect(Collectors.toList());
 
+        board.setPadding(new Insets(10, 10, 10, 10));
+        board.setVgap(8);
+        board.setHgap(10);
+
         Game game = new Game(players);
-        game.run();
-
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setVgap(8);
-        grid.setHgap(10);
-
-//        for(Token)
-
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("lab7");
         primaryStage.setScene(new Scene(root, 600, 675));
         primaryStage.show();
+
+        game.run();
+
     }
 
 

@@ -1,10 +1,12 @@
 package sample;
 
+import javafx.scene.layout.GridPane;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Board {
+public class Board extends GridPane {
     private List<Token> tokens;
     private int playersTurn;
 

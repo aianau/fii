@@ -1,12 +1,25 @@
 package sample;
 
-public class Token {
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+
+public class Token extends Circle {
+
+    private static final Paint notSelectedPaint = Paint.valueOf("#9ac47a");
+    private static final Paint selectedPaint = Paint.valueOf("#aa4bcc");
+
     private final int row;
     private final int column;
+
     private boolean selected;
 
-
     public Token(int row, int column) {
+        super(row, column, 20, notSelectedPaint);
+
+        this.setOnMouseClicked(e->{
+            this.setFill(selectedPaint);
+        });
+
         this.row = row;
         this.column = column;
         this.selected = false;

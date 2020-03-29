@@ -53,30 +53,7 @@ public class Player implements Runnable {
         boolean selected = false;
 
         do{
-            System.out.println("Please choose a non selected token.");
-            System.out.println(board.getTokens());
-            do {
-                try {
-                    System.out.print(name + " enter row: ");
-                    input = in.next();
-                    row = Integer.parseInt(input);
-                    System.out.println(row);
-                } catch (Exception e) {
-                    System.out.println("Input a valid number, try again.");
-                    good = false;
-                }
-            } while (!good);
-            do {
-                try {
-                    System.out.print(name + " enter column: ");
-                    input = in.next();
-                    column = Integer.parseInt(input);
-                    System.out.println(column);
-                } catch (Exception e) {
-                    System.out.println("Input a valid number, try again.");
-                    good = false;
-                }
-            } while (!good);
+
 
             try{
                 selected = this.getBoard().getToken(row, column).isSelected();
