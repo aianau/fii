@@ -352,3 +352,4 @@ select count(*)|| ' relatii de prietenie' from prieteni;
 
 
 
+COMMIT;
