@@ -1,0 +1,6 @@
+[submodule "ip/reviews-retriaval"]
+	path = ip/reviews-retriaval
+	url = https://github.com/aianau/reviews-retriaval.git
+[submodule "ip/image-processor"]
+	path = ip/image-processor
+	url = https://github.com/aianau/image-processor.git

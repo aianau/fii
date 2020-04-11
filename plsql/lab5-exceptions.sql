@@ -313,7 +313,6 @@ begin
     end if;
 end check_prof_curs;
 /
-exec check_prof_curs(1,1);
 
 --varianta 2 (cea in care se folosesc exceptiile propriu-zise)
 create or replace procedure check_prof_curs(IN_curs_id cursuri.id%type, IN_prof_id profesori.id%type)

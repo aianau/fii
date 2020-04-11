@@ -203,8 +203,6 @@ BEGIN
 END;
 /
 
-EXEC rata_promovabilitate;
-/
 /*3.(3p) Creati o procedura prin care un profesor pune note la disciplinele sale. Tratati toate exceptiile corespunzatoare (5).
 Creati mai intai o tabela std_profi cu campurile id,id_student,id_prof,id_curs,valoare*/
 -- nu exista student
@@ -366,13 +364,6 @@ begin
         dbms_output.put_line('stud are deja nota la curs!');
         return;
     END IF;
-    INSERT INTO std_profi VALUES (
-        in_id_student,
-        in_id_profesor,
-        in_id_curs,
-        valoare
-    );
-
 END;
 /
 

@@ -145,7 +145,6 @@ begin
 end p_afiseaza_varsta; 
 /
 --apelul
-exec p_afiseaza_varsta;
 
 
 /*4. Construiti o functie care sa returneze ca si sir de caractere situatia
@@ -207,8 +206,6 @@ begin
   end if;
   
 end;
-/
-exec get_interval_prieteni;
 /
 select * from interval_prieteni;
     
