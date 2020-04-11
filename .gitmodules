@@ -4,3 +4,6 @@
 [submodule "ip/image-processor"]
 	path = ip/image-processor
 	url = https://github.com/aianau/image-processor.git
+[submodule "tw/GaSM"]
+	path = tw/GaSM
+	url = https://github.com/alexDamian99/GaSM.git
