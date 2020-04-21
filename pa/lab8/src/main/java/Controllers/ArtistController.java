@@ -1,4 +1,6 @@
-package main;
+package Controllers;
+
+import entity.Artist;
 
 import java.util.List;
 

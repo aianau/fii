@@ -1,9 +1,14 @@
 package main;
 
-import javax.xml.crypto.Data;
-import java.sql.*;
-import java.util.List;
+import Controllers.OracleAlbumController;
+import Controllers.OracleArtistController;
+import Databases.DataBase;
+import Databases.DataBaseOracle;
+import entity.Album;
+import entity.Artist;
 
+import java.util.List;
+import java.sql.*;
 
 /*
 
@@ -46,15 +51,50 @@ Create a scenario in order to highlight the advantages of using a connection poo
 Use Visual VM in order to monitor the execution of your application.
 
  */
-
-public class Main {
-    public static void main(String[] args) throws SQLException {
-        test();
-    }
-
+public class Lab8 {
     public static void test() {
+        DataBase dataBase = new DataBaseOracle();
+        OracleArtistController artistController = new OracleArtistController(dataBase);
+
+        artistController.create(new Artist("Gigi", "Spania"));
+        List<Artist> artists = artistController.findByName("Andrei");
+        artists.forEach(System.out::println);
 
 
+        OracleAlbumController albumController = new OracleAlbumController(dataBase);
+        albumController.create(new Album(0,"Album21", 1, 1999));
+        albumController.create(new Album(1,"Album1", 1, 1999));
+        albumController.findByArtist(1).forEach(System.out::println);
+
+    }
+    public static void setup() {
+        String dropArtists = "drop table artists";
+        String dropAlbums = "drop table albums";
+        DataBase dataBase = new DataBaseOracle();
+
+        String createArtists = "create table artists(" +
+                "    id integer not null generated always as identity (start with 1, increment by 1)," +
+                "    name varchar(100) not null," +
+                "    country varchar(100)," +
+                "    primary key (id)" +
+                ")";
+        String createAlbums = "create table albums(" +
+                "    id integer not null generated always as identity (start with 1, increment by 1)," +
+                "    name varchar(100) not null," +
+                "    artist_id integer not null references artists on delete restrict," +
+                "    release_year integer," +
+                "    primary key (id)" +
+                ")";
+
+
+        Connection connection = dataBase.getConnection();
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute(createArtists);
+            statement.execute(createAlbums);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }

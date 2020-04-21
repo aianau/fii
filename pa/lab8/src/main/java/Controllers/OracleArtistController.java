@@ -1,4 +1,7 @@
-package main;
+package Controllers;
+
+import Databases.DataBase;
+import entity.Artist;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package main;
+package Databases;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,5 +22,16 @@ public class DataBaseOracle implements DataBase{
     @Override
     public Connection getConnection() {
         return connection;
+    }
+
+    @Override
+    public void closeConnection() {
+        if (connection != null){
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }
