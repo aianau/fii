@@ -1,4 +1,4 @@
-/*1.Afiºaþi studenþii ºi notele luate de acestia precum si profesorii care le-au pus acele note.*/
+--1.Afiï¿½aï¿½i studenï¿½ii ï¿½i notele luate de acestia precum si profesorii care le-au pus acele note.*/
 --varianta mai putin corecta in care sunt cazuri cand, pentru acelasi student, exista 2 note la acelasi obiect, puse de profi diferiti
 select s.nume,s.prenume,trim(p.nume) as nume_prof, c.titlu_curs,valoare
 from studenti s join note n on n.nr_matricol=s.nr_matricol join didactic d on d.id_curs=n.id_curs join profesori p on p.id_prof=d.id_prof
@@ -16,21 +16,21 @@ select s.nume,s.prenume,trim(p.nume) as nume_prof,c.titlu_curs,valoare
 order by 1;
 
 	
-/*2.Afisati studenþii care au luat nota 10 la materia 'BD'. 
-Singurele valori pe care aveþi voie sã le hardcodaþi în interogare sunt valoarea notei (10) ºi numele cursului ('BD').*/
+--2.Afisati studenï¿½ii care au luat nota 10 la materia 'BD'. 
+--Singurele valori pe care aveï¿½i voie sï¿½ le hardcodaï¿½i ï¿½n interogare sunt valoarea notei (10) ï¿½i numele cursului ('BD').*/
 select s.nr_matricol,nume,prenume
 from studenti s join note n on s.nr_matricol=n.nr_matricol join cursuri c on c.id_curs=n.id_curs
 where titlu_curs='BD' and valoare=10
 order by 1;
 
 
-/*3.Afisaþi profesorii (numele ºi prenumele) impreuna cu cursurile pe care fiecare le þine.*/
+--3.Afisaï¿½i profesorii (numele ï¿½i prenumele) impreuna cu cursurile pe care fiecare le ï¿½ine.*/
 select nume,prenume,titlu_curs
 from didactic d join profesori p on p.id_prof=d.id_prof join cursuri c on d.id_curs=c.id_curs 
 order by 1;
 
 
-/*4.Modificaþi interogarea de la punctul 3 pentru a fi afiºaþi ºi acei profesori care nu au încã alocat un curs.*/
+--4.Modificaï¿½i interogarea de la punctul 3 pentru a fi afiï¿½aï¿½i ï¿½i acei profesori care nu au ï¿½ncï¿½ alocat un curs.*/
 --afisam toti profii, adica si cei ce au curs si cei ce nu au curs
 select nume,prenume,nvl(titlu_curs,'Nu are curs !') as titlu_curs
 from profesori p left join didactic d on p.id_prof=d.id_prof left join cursuri c on d.id_curs=c.id_curs  
@@ -45,7 +45,7 @@ where p.id_prof=d.id_prof(+) and id_curs is null
 order by 1;
 	
 
-/*5.Modificaþi interogarea de la punctul 3 pentru a fi afiºate acele cursuri ce nu au alocate încã un profesor.*/
+--5.Modificaï¿½i interogarea de la punctul 3 pentru a fi afiï¿½ate acele cursuri ce nu au alocate ï¿½ncï¿½ un profesor.*/
 select titlu_curs
 from cursuri c left join didactic d on c.id_curs=d.id_curs
 where d.id_prof is null;
@@ -55,22 +55,22 @@ select titlu_curs
 from cursuri c, didactic d
 where c.id_curs=d.id_curs(+) and id_prof is null;
 
-/*6.Modificaþi interogarea de la punctul 3 astfel încât sã fie afiºaþi atat profesorii care nu au nici 
-un curs alocat cât ºi cursurile care nu sunt încã predate de nici un profesor*/
+--6.Modificaï¿½i interogarea de la punctul 3 astfel ï¿½ncï¿½t sï¿½ fie afiï¿½aï¿½i atat profesorii care nu au nici 
+--un curs alocat cï¿½t ï¿½i cursurile care nu sunt ï¿½ncï¿½ predate de nici un profesor*/
 --varianta cu full join 
 select nvl(nume,'nu exista prof !') as nume_prof,nvl(titlu_curs,'nu are curs') as titlu_curs
 from profesori p full join didactic d on d.id_prof=p.id_prof full join cursuri c on c.id_curs=d.id_curs
 where c.id_curs is null or p.id_prof is null;
 	
 
-/*7.In tabela studenti existã studenþi care s-au nascut în aceeasi zi a sãptãmânii. 
-De exemplu, Cobzaru George ºi Pintescu Andrei s-au nãscut amândoi într-o zi de marti.
-Construiti o listã cu studentii care s-au nãscut in aceeaºi zi grupându-i doi câte doi în ordine alfabeticã a numelor 
-(de exemplu in rezultat va apare combinatia Cobzaru-Pintescu dar nu va apare ºi Pintescu-Cobzaru).
-Lista va trebui sã conþinã doar numele de familie a celor doi împreunã cu ziua în care cei doi s-au nãscut. 
-Evident, dacã existã ºi alþi studenti care s-au nãscut marti, vor apare si ei in combinatie cu cei doi amintiþi mai sus. 
-Lista va fi ordonatã în funcþie de ziua sãptãmânii în care s-au nãscut si, în cazul în care sunt mai mult de trei studenþi nãscuþi în aceeaºi zi, 
-rezultatele vor fi ordonate ºi dupã numele primei persoane din listã*/
+--7.In tabela studenti existï¿½ studenï¿½i care s-au nascut ï¿½n aceeasi zi a sï¿½ptï¿½mï¿½nii. 
+--De exemplu, Cobzaru George ï¿½i Pintescu Andrei s-au nï¿½scut amï¿½ndoi ï¿½ntr-o zi de marti.
+--Construiti o listï¿½ cu studentii care s-au nï¿½scut in aceeaï¿½i zi grupï¿½ndu-i doi cï¿½te doi ï¿½n ordine alfabeticï¿½ a numelor 
+--(de exemplu in rezultat va apare combinatia Cobzaru-Pintescu dar nu va apare ï¿½i Pintescu-Cobzaru).
+--Lista va trebui sï¿½ conï¿½inï¿½ doar numele de familie a celor doi ï¿½mpreunï¿½ cu ziua ï¿½n care cei doi s-au nï¿½scut. 
+--Evident, dacï¿½ existï¿½ ï¿½i alï¿½i studenti care s-au nï¿½scut marti, vor apare si ei in combinatie cu cei doi amintiï¿½i mai sus. 
+--Lista va fi ordonatï¿½ ï¿½n funcï¿½ie de ziua sï¿½ptï¿½mï¿½nii ï¿½n care s-au nï¿½scut si, ï¿½n cazul ï¿½n care sunt mai mult de trei studenï¿½i nï¿½scuï¿½i ï¿½n aceeaï¿½i zi, 
+--rezultatele vor fi ordonate ï¿½i dupï¿½ numele primei persoane din listï¿½*/
 
 --varianta 1 (joinul se face printr-o coloana non-cheie)
 select s1.nume||' - '||s2.nume||' - '||to_char(s1.data_nastere,'day') as perechi
@@ -85,9 +85,9 @@ where to_char(s1.data_nastere,'day')=to_char(s2.data_nastere,'day')
 order by s1.data_nastere,s1.nume;
 
 
-/*8.Sa se afiseze, pentru fiecare student, numele colegilor care au luat nota mai mare ca ei la fiecare dintre cursuri. 
-Formulati rezultatele ca propozitii (de forma "Popescu Gigel a luat nota mai mare ca Vasilescu Ionel la matera BD."). 
-Dati un nume corespunzator coloanei [pont: interogarea trebuie sã returneze 118 rânduri].*/
+--8.Sa se afiseze, pentru fiecare student, numele colegilor care au luat nota mai mare ca ei la fiecare dintre cursuri. 
+--Formulati rezultatele ca propozitii (de forma "Popescu Gigel a luat nota mai mare ca Vasilescu Ionel la matera BD."). 
+--Dati un nume corespunzator coloanei [pont: interogarea trebuie sï¿½ returneze 118 rï¿½nduri].*/
 select s1.nume||' '||s1.prenume||' a luat nota mai mare ca '||s2.nume||' '||s2.prenume||' la materia '||titlu_curs as note
 from cursuri c join note n1 on n1.id_curs=c.id_curs join note n2 on n2.id_curs=c.id_curs
   join studenti s1 on s1.nr_matricol=n1.nr_matricol join studenti s2 on s2.nr_matricol=n2.nr_matricol
@@ -111,34 +111,34 @@ select upper(nume)||' '||upper(prenume) as "Studenti",lower(titlu_curs) as "Curs
 from studenti s join note n on n.nr_matricol=s.nr_matricol join cursuri c on c.id_curs=n.id_curs
 order by 1;
 
-/*2.Pentru studentii nascuti in luna decembrie afisati numele, prenumele, ziua din saptamana in care s-a nascut cu Aliasul "Zi nastere"
-cu prima litera majuscula iar restul litere mici, si varsta sa in ani (valoare intreaga) cu aliasul "Varsta".*/ 
+--2.Pentru studentii nascuti in luna decembrie afisati numele, prenumele, ziua din saptamana in care s-a nascut cu Aliasul "Zi nastere"
+--cu prima litera majuscula iar restul litere mici, si varsta sa in ani (valoare intreaga) cu aliasul "Varsta".*/ 
 select nume,prenume,initcap(to_char(data_nastere,'day')) as "Zi nastere",trunc(months_between(sysdate,data_nastere)/12) as Varsta
 from studenti
 where extract(month from data_nastere)=12;
 
-/*3.Afisati numele, prenumele si anul de studiu incrementat cu 1 (in coloana "an nou") pentru studentii care au bursa si au in componenta numelui litera "a" (sau "A").*/
+--3.Afisati numele, prenumele si anul de studiu incrementat cu 1 (in coloana "an nou") pentru studentii care au bursa si au in componenta numelui litera "a" (sau "A").*/
 select nume,prenume,an+1 as "an nou"
 from studenti
 where bursa is not null and (nume like '%a%' or nume like '%A%');
 
-/*4.Afisati numele scris cu litere mari (in coloana 'NUME') si textul "are bursa" sau "nu are bursa", 
-dupa caz (in coloana 'statut') doar pentru acei studenti care au litera "e" (sau "E") in componenta numelui.*/
+--4.Afisati numele scris cu litere mari (in coloana 'NUME') si textul "are bursa" sau "nu are bursa", 
+--dupa caz (in coloana 'statut') doar pentru acei studenti care au litera "e" (sau "E") in componenta numelui.*/
 select upper(nume) as "NUME", decode(nvl(bursa,0),0,'nu are bursa','are bursa') as statut
 from studenti
 where upper(nume) like '%E%';
 
-/*5.Selectati numele (cu trim), gradul didactic ale profesorului si titlul cursului la care acesta preda.
-Daca profesorul nu preda la nici un curs sau nu are grad didactic, se va afisa '*'. Daca cursul nu are nici un profesor asociat, se va afisa 'No prof'. 
-Ordonati dupa nume. (Ex: Pentru cursul de Limbaje Formale: No prof   *   Limbaje Formale).
-Coloanele se vor numi nume_prof, grad_didactic si titlu_curs. */
+--5.Selectati numele (cu trim), gradul didactic ale profesorului si titlul cursului la care acesta preda.
+--Daca profesorul nu preda la nici un curs sau nu are grad didactic, se va afisa '*'. Daca cursul nu are nici un profesor asociat, se va afisa 'No prof'. 
+--Ordonati dupa nume. (Ex: Pentru cursul de Limbaje Formale: No prof   *   Limbaje Formale).
+--Coloanele se vor numi nume_prof, grad_didactic si titlu_curs. */
 select nvl(trim(p.nume),'No prof') as nume_prof,nvl(p.grad_didactic, '*') as grad_didactic,nvl(c.titlu_curs, '*') as titlu_curs
 from profesori p full join didactic d on d.id_prof=p.id_prof full join cursuri c on c.id_curs=d.id_curs
 order by trim(p.nume);
 
-/*6.Selectati numele si prenumele concatenate printr-un spatiu ale profesorilor in coloana "Nume prof", 
-si notele puse de acestia in coloana "Note". Numele profesorului trebuie sa contina literele 'a' si 's' (sau 'A' si 'S')(doar perechile date, nu altfel, gen 'a' si 'S').
-Daca profesorul nu a pus nici o nota, atunci se afiseaza '*'. Ordonati dupa "Note". Hint: 12 linii.*/
+--6.Selectati numele si prenumele concatenate printr-un spatiu ale profesorilor in coloana "Nume prof", 
+--si notele puse de acestia in coloana "Note". Numele profesorului trebuie sa contina literele 'a' si 's' (sau 'A' si 'S')(doar perechile date, nu altfel, gen 'a' si 'S').
+--Daca profesorul nu a pus nici o nota, atunci se afiseaza '*'. Ordonati dupa "Note". Hint: 12 linii.*/
 select distinct trim(p.nume)||' '||trim(p.prenume) as "Nume prof", nvl(to_char(n.valoare), '*') as "Note" 
 from profesori p left join didactic d on p.id_prof=d.id_prof left join note n on n.id_curs=d.id_curs
 where trim(p.nume) like '%a%s%' or trim(p.nume) like '%A%S%'

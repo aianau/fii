@@ -15,7 +15,7 @@ CONN STUDENT/STUDENT@localhost/XE -- conexiune cu userul proaspat creat.
 edit --se deschide deschide editorul implicit pentru a edita continutul bufferului.
 --Acest editor trebuie inchis pentru a putea rula din nou continutul bufferului (cu RUN sau /);
 
-/*2. Inseraţi în baza de date nou creat�? un student Popescu Ionut, 
+--2. Inseraţi în baza de date nou creat�? un student Popescu Ionut, 
 proaspat înmatriculat în anul 2 care a luat nota 10 la materia Logica pentru informatica predata de Cristian Masalagiu în primul semestru din anul 1*/
 insert into studenti values ('124','Popescu','Ionut',2,null,null,to_date('10/05/1997', 'dd/mm/yyyy'));
 insert into note values('124',21,10,to_date('10/02/2016','dd/mm/yyyy'));

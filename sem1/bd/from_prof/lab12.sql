@@ -6,10 +6,10 @@ FROM studenti
 WHERE an=&an AND nume like '&nume';
 
 --2.
-SELECT nume, &camp_afisare/*(an)*/
+SELECT nume, &camp_afisare--(an)*/
 FROM studenti
-WHERE &conditie2/*(an>1)*/
-ORDER BY &camp_sortare/*(1)*/;
+WHERE &conditie2--(an>1)*/
+ORDER BY &camp_sortare--(1)*/;
 
 --3.
 DEFINE camp=prenume
@@ -41,8 +41,8 @@ CREATE SEQUENCE s1
 
 SELECT s1.NEXTVAL FROM DUAL;
 --Exercitii
---1.Cum poate fi utilizatÄ? o secvenÈ›Ä? la inserare? RÄ?spundeÈ›i creÃ¢nd o secvenÈ›Ä? care
---sa vÄ? ajute sa inseraÈ›i noi cursuri cu id unic, cu intrari consecutive crescÄ?toare cu pasul 1. 
+--1.Cum poate fi utilizatï¿½? o secvenÈ›ï¿½? la inserare? Rï¿½?spundeÈ›i creÃ¢nd o secvenÈ›ï¿½? care
+--sa vï¿½? ajute sa inseraÈ›i noi cursuri cu id unic, cu intrari consecutive crescï¿½?toare cu pasul 1. 
 --Inserati 3 cursuri noi cu id-ul generat de secventa.
 drop sequence seq_idcurs;
 /
@@ -57,14 +57,14 @@ insert into cursuri(id_curs,titlu_curs) values (seq_idcurs.nextval,'curs3');
 insert into cursuri(id_curs,titlu_curs) values (seq_idcurs.nextval,'curs4'); --not ok
 /
 select * from cursuri;
---Actualizarea Ã®nregistrÄ?rilor
+--Actualizarea Ã®nregistrï¿½?rilor
 --Exemplu
 UPDATE studenti
 SET bursa=bursa*0.15 
 WHERE bursa<300;
 
 --Exercitii
---1.Actualizati valoarea bursei pentru studentii care au mÄ?car o notÄ? de 10. Acestia vor primi ca bursa 500RON.
+--1.Actualizati valoarea bursei pentru studentii care au mï¿½?car o notï¿½? de 10. Acestia vor primi ca bursa 500RON.
 --varianta cu operatorul exists
 update studenti s1
 set bursa = 500
@@ -87,7 +87,7 @@ update studenti s
 set bursa = (select 100*avg(valoare) from note n where s.nr_matricol = n.nr_matricol);
 
 
---È?tergerea Ã®nregistrÄ?rilor
+--ï¿½?tergerea Ã®nregistrï¿½?rilor
 --Exercitii
 --1.Stergeti toti studentii care nu au nici o nota.
 delete from studenti
@@ -113,7 +113,7 @@ select * from studenti;
 
 --Comenzi DDL - creare/modificare structuri de date
 --create table as
---1.Executati comanda ROLLBACK. Creati apoi o tabelÄ? care sÄ? stocheze numele, prenumele, bursa si mediile studentilor.
+--1.Executati comanda ROLLBACK. Creati apoi o tabelï¿½? care sï¿½? stocheze numele, prenumele, bursa si mediile studentilor.
 rollback;
 /
 drop table test_student;
@@ -153,7 +153,7 @@ desc note;
 ALTER TABLE note DROP CONSTRAINT fk_studs;
 
 --Exercitii
-1--1.AdÄ?ugaÈ›i constrÃ¢ngerile de tip cheie primarÄ? pentru tabelele Studenti, Profesori, Cursuri.
+1--1.Adï¿½?ugaÈ›i constrÃ¢ngerile de tip cheie primarï¿½? pentru tabelele Studenti, Profesori, Cursuri.
 ALTER TABLE studenti ADD CONSTRAINT pk_studs PRIMARY KEY (nr_matricol);--ok
 --pentru profesori nu va merge deoarece in tabela profesori avem chei duplicat !
 ALTER TABLE profesori ADD CONSTRAINT pk_profs PRIMARY KEY (id_prof);
@@ -165,7 +165,7 @@ ALTER TABLE profesori ADD CONSTRAINT pk_profs PRIMARY KEY (id_prof);
 --pentru cursuri e ok
 ALTER TABLE cursuri ADD CONSTRAINT pk_curs PRIMARY KEY (id_curs);
 
---2.AdÄ?ugaÈ›i constrÃ¢ngerile referenÈ›iale pentru tabelele Note si Didactic
+--2.Adï¿½?ugaÈ›i constrÃ¢ngerile referenÈ›iale pentru tabelele Note si Didactic
 ALTER TABLE note ADD CONSTRAINT fk_studs FOREIGN KEY (nr_matricol) REFERENCES studenti(nr_matricol);-- ON DELETE CASCADE;
 ALTER TABLE note ADD CONSTRAINT fk_curs_note FOREIGN KEY (id_curs) REFERENCES cursuri(id_curs);-- ON DELETE CASCADE;
 ALTER TABLE didactic ADD CONSTRAINT fk_curs FOREIGN KEY (id_curs) REFERENCES cursuri(id_curs);-- ON DELETE CASCADE;
@@ -184,10 +184,10 @@ where id_curs=25;
 /
 select * from didactic;
 
---3.ImpuneÈ›i constrÃ¢ngerea ca un student sÄ? nu aibÄ? mai mult de o notÄ? la un curs.
+--3.ImpuneÈ›i constrÃ¢ngerea ca un student sï¿½? nu aibï¿½? mai mult de o notï¿½? la un curs.
 alter table note add constraint un_valoare_curs unique(nr_matricol,id_curs);
 
---4.ImpuneÈ›i constrÃ¢ngerea ca valoarea notei sÄ? fie cuprinsÄ? Ã®ntre 1 È™i 10.
+--4.ImpuneÈ›i constrÃ¢ngerea ca valoarea notei sï¿½? fie cuprinsï¿½? Ã®ntre 1 È™i 10.
 alter table note drop constraint ck_valoare1;
 alter table note add constraint ck_valoare1 check(valoare between 1 and 10);
 
@@ -203,12 +203,12 @@ select * from T;
 rollback;
 select * from T;--daca dupa insert into T values (2,null) se da commit, atunci rollback nu mai influenteaza, se afiseaza 1 si 2 !
 
---1.Asigurati-va cÄ? Ã®ncepeÈ›i o nouÄ? tranzacÈ›ie.
---2.È?tergeÈ›i toate Ã®nregistrÄ?rile din tabela Profesori.
+--1.Asigurati-va cï¿½? Ã®ncepeÈ›i o nouï¿½? tranzacÈ›ie.
+--2.ï¿½?tergeÈ›i toate Ã®nregistrï¿½?rile din tabela Profesori.
 delete from profesori;
 --3.InseraÈ›i un profesor.
 insert into profesori values ('p1','nume1','prenume1','prof');
---4.MarcaÈ›i starea curentÄ? ca 's1'.
+--4.MarcaÈ›i starea curentï¿½? ca 's1'.
 savepoint s1;
 --5.SchimbaÈ›i numele profesorului inserat.
 update profesori

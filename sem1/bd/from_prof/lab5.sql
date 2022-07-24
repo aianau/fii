@@ -1,5 +1,5 @@
-/*1.Afisati studentii doi cate doi impreuna cu diferenta de varsta dintre ei. Sortati in ordine crescatoare in functie de aceste diferente.
-Aveti grija sa nu comparati un student cu el insusi.*/
+--1.Afisati studentii doi cate doi impreuna cu diferenta de varsta dintre ei. Sortati in ordine crescatoare in functie de aceste diferente.
+--Aveti grija sa nu comparati un student cu el insusi.*/
 column matr1 format A4
 column nume1 format A10
 column prenume1 format A10
@@ -15,7 +15,7 @@ from studenti s1 join studenti s2 on s1.nr_matricol>s2.nr_matricol
 order by abs(s1.data_nastere-s2.data_nastere);
 
 
-/*2.Afisati posibilele prietenii dintre studenti si profesori. Un profesor si un student se pot imprieteni daca numele lor de familie are acelasi numar de litere.*/
+--2.Afisati posibilele prietenii dintre studenti si profesori. Un profesor si un student se pot imprieteni daca numele lor de familie are acelasi numar de litere.*/
 select trim(s.nume)||' '||trim(s.prenume)||' prieten cu '||trim(p.nume)||' '||trim(p.prenume) as relation
 from studenti s join profesori p on length(s.nume)=length(trim(p.nume))
 order by 1;
@@ -30,7 +30,7 @@ where length(trim(s.nume))=length(trim(p.nume))
 order by 1;
 
 
-/*3.Afisati denumirile cursurilor la care s-au pus note cel mult egale cu 8 (<=8).*/
+--3.Afisati denumirile cursurilor la care s-au pus note cel mult egale cu 8 (<=8).*/
 --varianta cu minus
 select titlu_curs
 from cursuri c join note n on n.id_curs=c.id_curs
@@ -47,7 +47,7 @@ where c.id_curs not in
 	where valoare>8);
 	
 
-/*4.Afisati numele studentilor care au toate notele mai mari ca 7 sau egale cu 7.*/
+--4.Afisati numele studentilor care au toate notele mai mari ca 7 sau egale cu 7.*/
 select s.nr_matricol,s.nume,s.prenume
 from studenti s join note n on s.nr_matricol=n.nr_matricol
 where valoare is not null
@@ -67,18 +67,18 @@ where s.nr_matricol not in
 order by 1;
 
 
-/*5.Sa se afiseze studentii care au luat nota 7 sau nota 10 la OOP intr-o zi de marti.*/
+--5.Sa se afiseze studentii care au luat nota 7 sau nota 10 la OOP intr-o zi de marti.*/
 select s.nr_matricol,nume,prenume,to_char(data_notare,'day') as zi_notare,titlu_curs,valoare
 from studenti s join note n on s.nr_matricol=n.nr_matricol join cursuri c on c.id_curs=n.id_curs
 where titlu_curs='OOP' and valoare in(7,10) and trim(to_char(data_notare,'day'))='tuesday';
 --ALTER SESSION SET NLS_LANGUAGE= 'ENGLISH';
 
 
-/*6.O sesiune este identificata prin luna si anul in care au fost tinute. 
-Scrieti numele si prenumele studentilor ce au promovat examenele in fiecare sesiune impreuna cu notele luate de acestia si sesiunea in care a fost promovata materia.
-Formatul ce identifica sesiunea este "LUNA, AN", fara alte spatii suplimentare (De ex. "JUNE, 2015" sau "FEBRUARY, 2014"). 
-In cazul in care luna in care s-a tinut sesiunea a avut mai putin de 30 de zile afisati simbolul "+" pe o coloana suplimentara,
-indicand faptul ca acea sesiune a fost mai grea (avand mai putine zile), in caz contrar (cand luna are mai mult de 29 de zile) valoarea coloanei va fi null.*/
+--6.O sesiune este identificata prin luna si anul in care au fost tinute. 
+--Scrieti numele si prenumele studentilor ce au promovat examenele in fiecare sesiune impreuna cu notele luate de acestia si sesiunea in care a fost promovata materia.
+--Formatul ce identifica sesiunea este "LUNA, AN", fara alte spatii suplimentare (De ex. "JUNE, 2015" sau "FEBRUARY, 2014"). 
+--In cazul in care luna in care s-a tinut sesiunea a avut mai putin de 30 de zile afisati simbolul "+" pe o coloana suplimentara,
+--indicand faptul ca acea sesiune a fost mai grea (avand mai putine zile), in caz contrar (cand luna are mai mult de 29 de zile) valoarea coloanei va fi null.*/
 column matr format A4
 column nume format A10
 column prenume format A10
@@ -150,17 +150,17 @@ from studenti s join note n on n.nr_matricol=s.nr_matricol join cursuri c on c.i
 where titlu_curs='BD'
 order by 1;
 
-/*8.Identificati toate cursurile predate in facultate si toate cadrele didactice ale facultatii.
-Veti afisa: titlul cursului, numarul de credite alocate, numele si prenumele cadrului didactic care preda cursul.
-Vor aparea si cursurile care inca nu au asociati profesori, precum si profesorii care inca nu au asignat vreun curs.*/	
+--8.Identificati toate cursurile predate in facultate si toate cadrele didactice ale facultatii.
+--Veti afisa: titlul cursului, numarul de credite alocate, numele si prenumele cadrului didactic care preda cursul.
+--Vor aparea si cursurile care inca nu au asociati profesori, precum si profesorii care inca nu au asignat vreun curs.*/	
 --cel mai usor se face cu full join
 select titlu_curs,credite,nume,prenume
 from cursuri c full join didactic d on d.id_curs=c.id_curs full join profesori p on p.id_prof=d.id_prof;
 
 
 --EXEMPLE CU SELF-JOIN
-/*1.Pentru studenta Antonie Ioana afisati care sunt colegii ei. Nu o afisati si pe ea !
-Coleg = acelasi an, aceeasi grupa. Afisati 3 coloane, exact asa cum sunt in baza de date: nr_matricol, nume, prenume.*/
+--1.Pentru studenta Antonie Ioana afisati care sunt colegii ei. Nu o afisati si pe ea !
+--Coleg = acelasi an, aceeasi grupa. Afisati 3 coloane, exact asa cum sunt in baza de date: nr_matricol, nume, prenume.*/
 --studenti s1 reprezinta Popescu Bogdan, iar studenti s2 sunt colegii lui (am partitionat tabela studenti in doua)
 --evident s1.nr_matricol<>s2.nr_matricol, deoarece s1.nr_matricol este matricola lui Popescu Bogdan, iar s2.nr_matricol reprezinta matricolele colegilor
 --s1.grupa=s2.grupa and s1.an=s2.an deoarece coleg inseamna sa fie din acelasi an si aceeasi grupa cu cel caruia ii afisam colegii
@@ -177,17 +177,17 @@ from profesori p1 join profesori p2 on p1.id_prof<>p2.id_prof
   join didactic d1 on d1.id_prof=p1.id_prof join didactic d2 on d2.id_prof=p2.id_prof 
   join cursuri c1 on c1.id_curs=d1.id_curs join cursuri c2 on c2.id_curs=d2.id_curs and c2.id_curs=c1.id_curs;
   
-/*3.Sa se afiseze cupluri de numere matricole impreuna cu un ID al unui curs astfel 
-incat studentul avand primul numar matricol a luat nota strict mai mare decat studentul 
-avand cel de-al doilea numar matricol la cursul cu ID-ul dat de cea de-a treia coloana.
-Afisarea se va face doar pentru cursurile cu ID-urile 21 si 24. Coloanele se vor numi "M1", "M2", "curs".*/
+--3.Sa se afiseze cupluri de numere matricole impreuna cu un ID al unui curs astfel 
+--incat studentul avand primul numar matricol a luat nota strict mai mare decat studentul 
+--avand cel de-al doilea numar matricol la cursul cu ID-ul dat de cea de-a treia coloana.
+--Afisarea se va face doar pentru cursurile cu ID-urile 21 si 24. Coloanele se vor numi "M1", "M2", "curs".*/
 select n1.nr_matricol as M1,n2.nr_matricol as M2,n1.id_curs as curs
 from note n1 join note n2 on n1.valoare>n2.valoare 
 where n1.id_curs=n2.id_curs and n1.id_curs in ('21','24');  
   
-/*4.Pentru cursul de BD, afisati toate perechile de studenti ce au luat note, dar fara a afisa duplicate.
-Primul va fi afisat studentul ce a luat nota mai mare (iar daca sunt doi cu aceeasi cota, se vor afisa de doua ori,
-adica si a cu b, dar si b cu a). Afisati si notele !*/  
+--4.Pentru cursul de BD, afisati toate perechile de studenti ce au luat note, dar fara a afisa duplicate.
+--Primul va fi afisat studentul ce a luat nota mai mare (iar daca sunt doi cu aceeasi cota, se vor afisa de doua ori,
+--adica si a cu b, dar si b cu a). Afisati si notele !*/  
 select s1.nr_matricol||' '||s1.nume||' '||s1.prenume||' '||n1.valoare as student1,s2.nr_matricol||' '||s2.nume||' '||s2.prenume||' '||n2.valoare as student2
 from studenti s1 join studenti s2 on s1.nr_matricol<>s2.nr_matricol 
   join note n1 on s1.nr_matricol=n1.nr_matricol join note n2 on n2.nr_matricol=s2.nr_matricol
@@ -195,26 +195,26 @@ from studenti s1 join studenti s2 on s1.nr_matricol<>s2.nr_matricol
 where titlu_curs='BD';  
 
 
-/*5.Afisati toate perechile de profesori ce nu au grad didactic. Eliminati duplicatele.
-Prima coloana se va numi "prof1", iar a doua se va numi "prof2".*/
+--5.Afisati toate perechile de profesori ce nu au grad didactic. Eliminati duplicatele.
+--Prima coloana se va numi "prof1", iar a doua se va numi "prof2".*/
 select p1.nume||' '||p1.prenume as prof1,p2.nume||' '||p2.prenume as prof2
 from profesori p1 join profesori p2 on p1.id_prof<p2.id_prof 
 where p1.grad_didactic is null and p2.grad_didactic is null
 order by p1.nume;
 
-/*6.Afisati perechile de cursuri la care s-a pus cel putin o nota de 10. Eliminati duplicatele.
-Vor fi deci doua coloane, numite "Curs1" si "Curs2".*/
+--6.Afisati perechile de cursuri la care s-a pus cel putin o nota de 10. Eliminati duplicatele.
+--Vor fi deci doua coloane, numite "Curs1" si "Curs2".*/
 select distinct c1.titlu_curs as "Curs1",c2.titlu_curs as "Curs2"
 from cursuri c1 join cursuri c2 on c1.id_curs<c2.id_curs join note n1 on n1.id_curs=c1.id_curs join note n2 on n2.id_curs=c2.id_curs
 where n1.valoare=10 and n2.valoare=10;
 
-/*7.Afisati perechile de cursuri la care nu s-a pus nici o nota. Eliminati duplicatele.
-Vor fi deci doua coloane, numite "Curs1" si "Curs2".*/
+--7.Afisati perechile de cursuri la care nu s-a pus nici o nota. Eliminati duplicatele.
+--Vor fi deci doua coloane, numite "Curs1" si "Curs2".*/
 select c1.titlu_curs as "Curs1",c2.titlu_curs as "Curs2"
 from cursuri c1 join cursuri c2 on c1.id_curs<c2.id_curs left join note n1 on n1.id_curs=c1.id_curs left join note n2 on n2.id_curs=c2.id_curs
 where n1.id_curs is null and n2.id_curs is null;
 
-/*8.Afisati perechile de studenti (matricol, nume, prenume) care nu au nici o nota. Eliminati duplicatele*/
+--8.Afisati perechile de studenti (matricol, nume, prenume) care nu au nici o nota. Eliminati duplicatele*/
 --evident ca in baza noastra de date cei ce nu au note sunt cei din anul 1, dar sub nici o forma la examenul final sa nu faceti hardcodari
 --veti fi penalizati !!!!
 select s1.nr_matricol||' '||s1.nume||' '||s1.prenume as student1,
@@ -223,14 +223,14 @@ from studenti s1 join studenti s2 on s1.nr_matricol<s2.nr_matricol left join not
   left join note n2 on s2.nr_matricol=n2.nr_matricol
 where n1.nr_matricol is null and n2.nr_matricol is null;
 
-/*9.Afisati perechile de profesorii ce nu tin nici un curs. Eliminati duplicatele.*/
+--9.Afisati perechile de profesorii ce nu tin nici un curs. Eliminati duplicatele.*/
 select p1.nume||' '||p1.prenume as prof1, p2.nume||' '||p2.prenume as prof2
 from profesori p1 join profesori p2 on p1.id_prof<p2.id_prof left join didactic d1 on p1.id_prof=d1.id_prof
    left join didactic d2 on d2.id_prof=p2.id_prof
 where d1.id_curs is null and d2.id_curs is null;
 
-/*10.Afisati perechile de studenti ce au aceeasi nota la materiile din anul 1. Eliminati duplicatele.
-Afisati si cursurile si notele ! Sunt deci doar 2 coloane. Coloanele se vor numi "student1" si "student2"*/
+--10.Afisati perechile de studenti ce au aceeasi nota la materiile din anul 1. Eliminati duplicatele.
+--Afisati si cursurile si notele ! Sunt deci doar 2 coloane. Coloanele se vor numi "student1" si "student2"*/
 select s1.nr_matricol||' '||s1.nume||' '||s1.prenume||' '||c1.titlu_curs||' '||n1.valoare as student1,
   s2.nr_matricol||' '||s2.nume||' '||s2.prenume||' '||c2.titlu_curs||' '||n2.valoare as student2  
 from studenti s1 join studenti s2 on s1.nr_matricol<s2.nr_matricol join note n1 on s1.nr_matricol=n1.nr_matricol
@@ -252,8 +252,8 @@ where grad_didactic <>'Conf'
 order by 1;  
 
 --12.Afisati numele inversat concatenat cu prenumele intr-o coloana numita "Studs" (ucsepoPBogdan), bursa marita cu 15 ron pentru cei
-ce au bursa si cu 1500 pentru cei ce nu au intr-o coloana numita "Bursieri" si o a treia coloana numita "value" unde veti avea nr 
-matricol adunat cu bursa (unde bursa este null ramane null).*/
+--ce au bursa si cu 1500 pentru cei ce nu au intr-o coloana numita "Bursieri" si o a treia coloana numita "value" unde veti avea nr 
+--matricol adunat cu bursa (unde bursa este null ramane null).*/
 select reverse(nume) || prenume as Studs,bursa+15 as Bursieri,bursa+to_number(nr_matricol) as value
 from studenti 
 where bursa is not null
@@ -264,9 +264,9 @@ where bursa is null
 order by 2;
 
 
-/*13.Selectati in coloana "Informatii", concatenate prin '*': numele, prenumele si anul de studiu al studetilor care au un nr matricol 
-nr impar si care au bursa cuprinsa intre 200 si 400 lei. In aceeasi coloana, folosind aceeasi concatenare, afisati id-ul, numele si gradul didactic al
-profesorilor care au minim un 'a' in nume, minim un 'i' in prenume si care au gradul de Prof. Nu mai folositi TRIM ! HINT: 4 inregistrari.*/
+--13.Selectati in coloana "Informatii", concatenate prin '*': numele, prenumele si anul de studiu al studetilor care au un nr matricol 
+--nr impar si care au bursa cuprinsa intre 200 si 400 lei. In aceeasi coloana, folosind aceeasi concatenare, afisati id-ul, numele si gradul didactic al
+--profesorilor care au minim un 'a' in nume, minim un 'i' in prenume si care au gradul de Prof. Nu mai folositi TRIM ! HINT: 4 inregistrari.*/
 select nume||'*'||prenume||'*'||an as "Informatii"
 from studenti
 where mod(to_number(nr_matricol),2)<>0 and bursa between 200 and 400 

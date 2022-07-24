@@ -20,7 +20,6 @@ CREATE TABLE studenti(
   )
 /
 
-
 CREATE TABLE cursuri(
   id_curs CHAR(2) NOT NULL,
   titlu_curs VARCHAR2(15),
